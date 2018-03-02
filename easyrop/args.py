@@ -41,7 +41,7 @@ class Args:
         parser.add_argument("--test-binary", type=str, metavar="<path>", help="Analyze a binary to test viability of an attack")
         parser.add_argument("--ropattack", type=str, metavar="<path>", help="Generate ROP attack from file")
         parser.add_argument("--dlls", action="store_true", help="Enable ROP attack search through KnownDLLs")
-        parser.add_argument("--bad-chars", type=str, metavar="<list>", help="The list of characters to avoid in ROP chain. Example: '\\x00\\xff'")
+        parser.add_argument("--bad-chars", type=str, metavar="<list>", help="The list of characters to avoid in ROP chain. Example: '\\x00\\x0a'")
         
 
         self.__args = parser.parse_args(arguments)
