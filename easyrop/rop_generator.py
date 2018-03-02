@@ -236,6 +236,8 @@ class RopGenerator:
             args_string += " --nojop"
         if args.noretf:
             args_string += " --noretf"
+        if args.bad_chars:
+            args_string += " --bad-chars %s" % args.bad_chars
         return args_string
 
     def print_combinations(self, ops, combinations):

@@ -4,6 +4,7 @@ This class parses and checks the arguments passed to script
 
 import argparse
 import sys
+import re
 from easyrop.parsers.parser import Parser
 from easyrop.version import *
 from easyrop.parsers.parse_exception import ParseException
@@ -40,6 +41,8 @@ class Args:
         parser.add_argument("--test-binary", type=str, metavar="<path>", help="Analyze a binary to test viability of an attack")
         parser.add_argument("--ropattack", type=str, metavar="<path>", help="Generate ROP attack from file")
         parser.add_argument("--dlls", action="store_true", help="Enable ROP attack search through KnownDLLs")
+        parser.add_argument("--bad-chars", type=str, metavar="<list>", help="The list of characters to avoid in ROP chain. Example: '\\x00\\xff'")
+        
 
         self.__args = parser.parse_args(arguments)
         self.check_args()
@@ -63,6 +66,10 @@ class Args:
 
             elif not self.__args.op and (self.__args.reg_src or self.__args.reg_dst):
                 print("[Error] reg specified without an opcode (--help)")
+                sys.exit(-1)
+
+            elif self.__args.bad_chars and (not re.match(r'^(/x[0-9a-f]{2})+$', self.__args.bad_chars, re.IGNORECASE)):
+                print("[Error] invalid format for --bad-chars parameter")
                 sys.exit(-1)
 
             elif not self.__args.op and self.__args.ropchain:

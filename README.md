@@ -34,6 +34,7 @@ optional arguments:
   --test-binary <path>  Analyze a binary to test viability of an attack
   --ropattack <path>    Generate ROP attack from file
   --dlls                Enable ROP attack search through KnownDLLs
+  --bad-chars           The list of characters to avoid in ROP chain. Example: '\\x00\\x0a'
 ```
 
 ### Operations

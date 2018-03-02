@@ -26,7 +26,11 @@ class Core:
         self.__gadgets += self.add_rop_gadgets()
         if not self.__options.nojop:
             self.__gadgets += self.add_jop_gadgets()
-        # apply some options
+        # remove gadgets with forbidden characters
+        print (self.__options.bad_chars)
+        if self.__options.bad_chars:
+            self.__gadgets = self.delete_badchars_gadgets(self.__gadgets)
+        # apply some options        
         if not self.__options.all:
             self.__gadgets = self.delete_duplicate_gadgets(self.__gadgets)
         self.__gadgets = self.pass_clean(self.__gadgets)
@@ -351,6 +355,16 @@ class Core:
                 print("0x%x : %s %s" % (gad["gadget"]["vaddr"], gad["gadget"]["gadget"], gad["values"]))
             print('-----------------------------------------')
         print("\nROPchains found: %d" % len(ropchains))
+
+    def delete_badchars_gadgets(self, gadgets):
+        accepted_gadgets = []
+        bad_chars = [x for x in re.findall(r'/x([0-9a-f]{2})', self.__options.bad_chars.lower())]
+        for gadget in gadgets:
+            vaddr_string = "{0:#010x}".format(gadget["vaddr"])
+            vaddr_chars = [vaddr_string[index:index+2] for index in range(2, 10, 2)]
+            if set(bad_chars).isdisjoint(vaddr_chars):
+                accepted_gadgets += [gadget]
+        return accepted_gadgets
 
     def delete_duplicate_gadgets(self, gadgets):
         gadgets_content_set = set()
